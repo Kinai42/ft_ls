@@ -56,7 +56,6 @@ void  ft_ls(t_data *data, char *path, int ac)
 	DIR				*dir;
 	char			**tab;
 	int				i;
-	int count;
 
 	i = 0;
 	data->count = 0;
@@ -66,7 +65,6 @@ void  ft_ls(t_data *data, char *path, int ac)
 	while ((dirent = readdir(dir)))
 		data->count++;
 	closedir(dir);
-	count = data->count;
 	tab = (char **)malloc(sizeof(char *) * data->count);
 	dir = opendir(path);
 	while ((dirent = readdir(dir)))
@@ -77,9 +75,6 @@ void  ft_ls(t_data *data, char *path, int ac)
 	if (data->opt_rec)
 		data->opt_r ? ft_rev(data, path, tab, ac) : ft_normal(data, path, tab, ac);
 	closedir(dir);
-	i = -1;
-	while (++i < count)
-		free (tab[i]);
 	free (tab);
 	free (dirent);
 }
