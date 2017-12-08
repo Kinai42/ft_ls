@@ -12,12 +12,11 @@
 
 #include "ft_ls.h"
 
-void  ft_error(t_data **data, char index, char *path)
+void  ft_error(char index, char *path)
 {
 	if (index == 1)
 	{
 		ft_printf("ls: illegal option -- %c\nusage: ls [-Ralrt] [file ...]\n", path[0]);
-		free(*data);
 		exit (0);
 	}
   if (index == 2)

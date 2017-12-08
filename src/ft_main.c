@@ -16,7 +16,7 @@
 
 static void	data_init(t_data *data, char **path)
 {
-	//struct winsize sz;
+	struct winsize sz;
 
 	data->opt_a = 0;
 	data->opt_l = 0;
@@ -25,8 +25,8 @@ static void	data_init(t_data *data, char **path)
 	data->opt_rec = 0;
 	data->count = 0;
 	*path = NULL;
-	//ioctl(0, TIOCGWINSZ, &sz);
-	data->width = 200;//sz.ws_col;
+	ioctl(0, TIOCGWINSZ, &sz);
+	data->width = sz.ws_col;
 }
 
 int	ft_size(t_data *data, char *name)
@@ -41,12 +41,12 @@ static char		format_verif_ls(t_data *data, char **path, char *av)
 	int	index;
 
 	index = 0;
-	if (av[index] == '-' && data->opt < 1 && av[index + 1])
+	if (av[index] == '-' && data->opt < 1)
 	{
-		while (av[++index])
+		while (av[++index] || index == 1)
 		{
 			if (!ft_option(data, av[index]))
-				ft_error(&data, 1, &av[index]);
+				ft_error(1, &av[index]);
 		}
 		return (2);
 	}
@@ -63,9 +63,8 @@ int			main(int ac, char **av)
 {
 	char	*path;
 	int		count;
-	t_data *data;
+	t_data data[1];
 
-	data = (t_data *)malloc(sizeof(t_data) * 1);
 	data_init(data, &path);
 	count = 0;
 	while (++count < ac)
@@ -77,6 +76,5 @@ int			main(int ac, char **av)
 			free (path);
 		}
 	data->opt == 0 ? ft_ls(data, ".", ac) : 1;
-	free(data);
 	return (0);
 }

@@ -9,12 +9,13 @@ include .misc/make/misc_var
 .DEFAULT_GOAL = __START
 
 CC		?=	clang
-CC_FLAG ?=	-Werror \
-			-Wall	\
-			-Wextra
-CC_FSANI	?=				-O1 -g -fsanitize=address	\
-			 							-fno-omit-frame-pointer		\
-			 							-fsanitize-address-use-after-scope \
+CC_FLAG ?=		-Werror \
+							-Wall	\
+							-Wextra
+
+CC_FLAG++	?=	-O1 -g -fsanitize=address	\
+			 				-fno-omit-frame-pointer		\
+							-fsanitize-address-use-after-scope \
 
 INCLUDE = include
 

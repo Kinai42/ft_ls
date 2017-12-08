@@ -42,7 +42,7 @@ void  ft_print(t_data *data, char *path, char **tab);
 void  ft_print_rights(t_data *data);
 void  ft_print_opt_l(t_data *data, char *path, char *file);
 void  ft_print_time(t_data *data);
-void  ft_error(t_data **data, char index, char *path);
+void  ft_error(char index, char *path);
 int		ft_size(t_data *data, char *name);
 void 	ft_normal(t_data *data, char *path, char **tab, int ac);
 void 	ft_rev(t_data *data, char *path, char **tab, int ac);

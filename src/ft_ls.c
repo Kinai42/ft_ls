@@ -22,10 +22,11 @@ int	ft_swap2(char **s1, char **s2)
 	return (1);
 }
 
-void  sort_param_opt(t_data * data, char **tab, char *path)
+void  sort_param_opt(t_data *data, char **tab, char *path)
 {
 	int	i;
 	int	power;
+	char	*s;
 	struct stat buf;
 	struct stat buf2;
 
@@ -38,8 +39,10 @@ void  sort_param_opt(t_data * data, char **tab, char *path)
 		{
 			if (data->opt_t)
 			{
-				lstat(ft_tab(path, tab[i]), &buf);
-				lstat(ft_tab(path, tab[i + 1]), &buf2);
+				lstat((s = ft_tab(path, tab[i])), &buf);
+				free (s);
+				lstat((s = ft_tab(path, tab[i + 1])), &buf2);
+				free (s);
 			}
 			if (data->opt_t ? buf.st_mtime < buf2.st_mtime : (ft_strcmp(tab[i], tab[i + 1]) > 0))
 				power = ft_swap2(&tab[i], &tab[i + 1]);
@@ -53,20 +56,18 @@ void  ft_ls(t_data *data, char *path, int ac)
 	DIR				*dir;
 	char			**tab;
 	int				i;
+	int count;
 
 	i = 0;
 	data->count = 0;
 	data->size = 0;
-	lstat(path, &data->file);
-	dir = opendir(path);
-	if (S_ISREG(data->file.st_mode) != 0 || S_ISDIR(data->file.st_mode) == 0)
-	{
-		return(S_ISREG(data->file.st_mode) ? 0 : (ft_error(&data, 2, path)));
-	}
-	while ((readdir(dir)))
+	if (!(dir = opendir(path)) && !stat(path, &data->file))
+		return (S_ISREG(data->file.st_mode) ? 0 : (ft_error(2, path)));
+	while ((dirent = readdir(dir)))
 		data->count++;
-	tab = (char **)malloc(sizeof(char *) * data->count);
 	closedir(dir);
+	count = data->count;
+	tab = (char **)malloc(sizeof(char *) * data->count);
 	dir = opendir(path);
 	while ((dirent = readdir(dir)))
 		if (ft_size(data, dirent->d_name))
@@ -76,7 +77,11 @@ void  ft_ls(t_data *data, char *path, int ac)
 	if (data->opt_rec)
 		data->opt_r ? ft_rev(data, path, tab, ac) : ft_normal(data, path, tab, ac);
 	closedir(dir);
+	i = -1;
+	while (++i < count)
+		free (tab[i]);
 	free (tab);
+	free (dirent);
 }
 
 void ft_normal(t_data *data, char *path, char **tab, int ac)
@@ -92,7 +97,8 @@ void ft_normal(t_data *data, char *path, char **tab, int ac)
 		tmp = ft_strdup(path);
 		tmp = ft_strjoin(tmp, "/");
 		tmp = ft_strjoin(tmp, tab[i]);
-		if (opendir(tmp))
+		lstat(tmp, &data->file);
+		if (S_ISDIR(data->file.st_mode) && !(S_ISLNK(data->file.st_mode)))
 			if ((tab[i][0] != '.' || data->opt_a) && tab[i][1] && tab[i][1] != '.')
 			{
 				write(1, "\n", 1);
@@ -113,7 +119,8 @@ void ft_rev(t_data *data, char *path, char **tab, int ac)
 		tmp = ft_strdup(path);
 		tmp = ft_strjoin(path, "/");
 		tmp = ft_strjoin(tmp, tab[i]);
-		if (opendir(tmp))
+		lstat(tmp, &data->file);
+		if (S_ISDIR(data->file.st_mode) && !(S_ISLNK(data->file.st_mode)))
 			if ((tab[i][0] != '.' || data->opt_a) && tab[i][1] && tab[i][1] != '.')
 			{
 				write(1, "\n", 1);

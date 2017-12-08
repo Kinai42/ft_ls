@@ -48,9 +48,7 @@ void  ft_print(t_data *data, char *path, char **tab)
 	while (i < count && i >= 0)
 	{
 		if (data->opt_l && (data->opt_a || tab[i][0] != '.'))
-		{
 			ft_print_opt_l(data, path, tab[i]);
-		}
 		else if (data->opt_a || tab[i][0] != '.')
 		{
 		  if ((size += (data->size + 1)) >= (data->width - data->size))
