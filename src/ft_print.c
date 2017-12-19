@@ -31,7 +31,7 @@ void		print_total(t_data *data, char *path, char **tab)
 		total += data->file.st_blocks;
 		free(s);
 	}
-	ft_printf("total %d\n", total);
+	printf("total %d\n", total);
 }
 
 void  ft_print(t_data *data, char *path, char **tab)
@@ -43,7 +43,7 @@ void  ft_print(t_data *data, char *path, char **tab)
 	count = data->count;
 	i = data->opt_r ? data->count - 1 : 0;
 	size = -data->size;
-	data->opt_rec ? ft_printf("%s:\n",  path) : 1;
+	data->opt_rec ? printf("%s:\n",  path) : 1;
 	data->opt_l ? print_total (data, path, tab) : 1;
 	while (i < count && i >= 0)
 	{
@@ -56,11 +56,11 @@ void  ft_print(t_data *data, char *path, char **tab)
 				write(1, "\n", 1);
 				size = 0;
 			}
-		  ft_printf("%-*s", (data->size + 1), tab[i]);
+		  printf("%-*s", (data->size + 1), tab[i]);
 		}
 		data->opt_r ? i-- : i++;
 	}
-		!data->opt_l ? write(1,"\n", 1) : 1;
+		!data->opt_l ? printf("\n") : 1;
 }
 
 void	ft_print_opt_l(t_data *data, char *path, char *file)
@@ -114,8 +114,8 @@ void	ft_print_time(t_data *data)
 	tmp = ctime(&data->file.st_mtime);
 	pwd = getpwuid(data->file.st_uid);
 	grp = getgrgid(data->file.st_gid);
-	ft_printf(" %4hu", data->file.st_nlink);
-	ft_printf(" %s	%s", pwd->pw_name, grp->gr_name);
-	ft_printf(" %8lld", data->file.st_size);
-	ft_printf(" %-14.12s", &tmp[4]);
+	printf(" %4hu", data->file.st_nlink);
+	printf(" %5s	%5s", pwd->pw_name, grp->gr_name);
+	printf(" %8lld", data->file.st_size);
+	printf(" %-14.12s", &tmp[4]);
 }

@@ -71,7 +71,7 @@ int			main(int ac, char **av)
 		if (format_verif_ls(data, &path, av[count]) == 1)
 		{
 			if (stat(path, &data->file) != -1)
-				ft_printf("%c%s%c\n", data->opt > 1 ? '\n' : 0, path, S_ISREG(data->file.st_mode) == 0 ? ':' : 0);
+				printf("%c%s%c\n", data->opt > 1 ? '\n' : 0, path, S_ISREG(data->file.st_mode) == 0 ? ':' : 0);
 			ft_ls(data, path, ac);
 			free (path);
 		}

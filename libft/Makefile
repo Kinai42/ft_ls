@@ -13,7 +13,9 @@ PROJECT	=	LIBFT
 CC		?=	clang
 CC_FLAG ?=	-Werror \
 			-Wall	\
-			-Wextra
+			-Wextra \
+			#-O1 -g -fsanitize=address	\
+			#-fno-omit-frame-pointer		\
 
 
 INCLUDE = include

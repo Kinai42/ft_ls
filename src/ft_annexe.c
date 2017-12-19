@@ -16,11 +16,11 @@ void  ft_error(char index, char *path)
 {
 	if (index == 1)
 	{
-		ft_printf("ls: illegal option -- %c\nusage: ls [-Ralrt] [file ...]\n", path[0]);
+		printf("ls: illegal option -- %c\nusage: ls [-Ralrt] [file ...]\n", path[0]);
 		exit (0);
 	}
   if (index == 2)
-		ft_printf("ls: %s: No such file or directory", path);
+		printf("ls: %s: No such file or directory\n", path);
 }
 
 char  ft_is_flag(char c)
@@ -62,10 +62,10 @@ char	*ft_tab(char *path, char *tab)
 
 void		print_link(char *path)
 {
-	char	buff[100];
+	char	buff[1000];
 	int		rd;
 
-	if ((rd = readlink(path, buff, 100)) > 0)
+	if ((rd = readlink(path, buff, 1000)) > 0)
 	{
 		write(1, " -> ", 4);
 		write(1, buff, rd);
