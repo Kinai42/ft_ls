@@ -14,7 +14,7 @@
 #include "ft_ls.h"
 #include <sys/ioctl.h>
 
-static void	data_init(t_data *data, char **path)
+static void	data_init(t_data *data)
 {
 	struct winsize sz;
 
@@ -23,8 +23,7 @@ static void	data_init(t_data *data, char **path)
 	data->opt_r = 0;
 	data->opt_t = 0;
 	data->opt_rec = 0;
-	data->count = 0;
-	*path = NULL;
+	data->arg = 0;
 	ioctl(0, TIOCGWINSZ, &sz);
 	data->width = sz.ws_col;
 }
@@ -36,45 +35,31 @@ int	ft_size(t_data *data, char *name)
 	return (1);
 }
 
-static char		format_verif_ls(t_data *data, char **path, char *av)
-{
-	int	index;
-
-	index = 0;
-	if (av[index] == '-' && data->opt < 1)
-	{
-		while (av[++index] || index == 1)
-		{
-			if (!ft_option(data, av[index]))
-				ft_error(1, &av[index]);
-		}
-		return (2);
-	}
-	else
-	{
-		data->opt += 1;
-		*path = ft_strdup(av);
-		return (1);
-	}
-	return (0);
-}
-
 int			main(int ac, char **av)
 {
-	char	*path;
-	int		count;
+	int		index;
+	int		arg;
 	t_data data[1];
 
-	data_init(data, &path);
-	count = 0;
-	while (++count < ac)
-		if (format_verif_ls(data, &path, av[count]) == 1)
+	data_init(data);
+	if (ac > 1)
+		format_verif_ls(data, av, ac);
+	index = 0;
+	arg = 1;
+	while (av[++index] && data->arg)
 		{
-			if (stat(path, &data->file) != -1)
-				printf("%c%s%c\n", data->opt > 1 ? '\n' : 0, path, S_ISREG(data->file.st_mode) == 0 ? ':' : 0);
-			ft_ls(data, path, ac);
-			free (path);
+			if (av[index][0] != '-')
+				{
+					stat(av[index], &data->file);
+					if (data->arg > 1 && S_ISDIR(data->file.st_mode))
+						printf("%s :\n", av[index]);
+					ft_ls(data, av[index], S_ISDIR(data->file.st_mode) ? 1 : 0);
+					if (arg++ < data->arg)
+						printf("\n");
+				}
 		}
-	data->opt == 0 ? ft_ls(data, ".", ac) : 1;
+	if (!data->arg)
+		ft_ls(data, ".", 1);
+	printf("\n");
 	return (0);
 }

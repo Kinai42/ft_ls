@@ -12,15 +12,18 @@
 
 #include "ft_ls.h"
 
-void  ft_error(char index, char *path)
+int	ft_count(char *path)
 {
-	if (index == 1)
-	{
-		printf("ls: illegal option -- %c\nusage: ls [-Ralrt] [file ...]\n", path[0]);
-		exit (0);
-	}
-  if (index == 2)
-		printf("ls: %s: No such file or directory\n", path);
+	int count;
+	struct dirent	*dirent;
+	DIR				*dir;
+
+	count = 0;
+	dir = opendir(path);
+	while ((dirent = readdir(dir)))
+		count++;
+	closedir(dir);
+	return (count);
 }
 
 char  ft_is_flag(char c)
@@ -32,7 +35,7 @@ char  ft_is_flag(char c)
 
 int ft_option(t_data *data, char c)
 {
-  if (c != 'a' && c != 'l' && c != 'r' && c != 't' && c != 'R')
+  if (!ft_is_flag(c))
     return (0);
   if (c == 'a')
     data->opt_a = 1;

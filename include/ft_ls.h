@@ -26,7 +26,7 @@ typedef struct s_data
 	char			opt_t;
 	char			opt_rec;
 	int				size;
-	int				count;
+	int				arg;
 	struct stat		file;
 	char			time[12];
 	int				width;
@@ -38,14 +38,16 @@ int 	ft_option(t_data *data, char c);
 void  ft_ls(t_data *data, char *path, int ac);
 void  sort_parm_opt(t_data *data, char **tab, char *path);
 char	*ft_tab(char *path, char *tab);
-void  ft_print(t_data *data, char *path, char **tab);
+int	ft_count(char *path);
+void  ft_print(t_data *data, char *path, char **tab, int count);
 void  ft_print_rights(t_data *data);
-void  ft_print_opt_l(t_data *data, char *path, char *file);
+void  ft_print_opt_l(t_data *data, char *path, char *file, int n);
 void  ft_print_time(t_data *data);
 void  ft_error(char index, char *path);
 int		ft_size(t_data *data, char *name);
 void 	ft_normal(t_data *data, char *path, char **tab, int ac);
 void 	ft_rev(t_data *data, char *path, char **tab, int ac);
 void	print_link(char *path);
+int		format_verif_ls(t_data *data, char **av, int ac);
 
 #endif
