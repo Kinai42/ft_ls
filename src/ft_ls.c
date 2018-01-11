@@ -109,9 +109,10 @@ void ft_rev(t_data *data, char *path, char **tab, int count)
 		tmp = ft_strjoin(tmp, tab[count]);
 		lstat(tmp, &data->file);
 		if (S_ISDIR(data->file.st_mode) && !(S_ISLNK(data->file.st_mode)))
-			if ((tab[count][0] != '.' || data->opt_a) && tab[count][1] && tab[count][1] != '.')
+			if ((((tab[i][0] != '.' || data->opt_a) && tab[i][1]) || tab[i][0] != '.') && tab[i][1] != '.')
 			{
-				printf("\n%s:\n", tmp);
+				printf("%s", !data->opt_l ? "\n" : "");
+				printf("\n%s:%s", tmp, count > 2 ? "\n" : "");
 				ft_ls(data, tmp, 1);
 			}
 		free(tmp);
