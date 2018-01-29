@@ -1,71 +1,110 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*   ft_printf.c			                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samad <samad@student.42.fr>                +#+  +:+       +#+        */
+/*   By: dbauduin <dbauduin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/07/14 05:09:29 by samad             #+#    #+#             */
-/*   Updated: 2017/10/24 18:21:48 by dbauduin         ###   ########.fr       */
+/*   Created: 2017/10/12 17:57:50 by dbauduin          #+#    #+#             */
+/*   Updated: 2017/10/22 22:30:03 by dbauduin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <ft_printf.h>
+#include <printf.h>
 
-static void	data_init(t_pdata *print, t_temp *temp)
+static int			ft_fields(char *s, long long *f, va_list ap)
 {
-	print->len = 0;
-	print->flags = 0;
-	print->tstart = 0;
-	print->tend = 0;
-	temp->i = -1;
-	temp->flag = 0;
-	temp->start = 0;
-	temp->end = 0;
-	temp->count = 0;
+	int		m;
+	int		p;
+	int		i;
+
+	m = 0;
+	i = 0;
+	while (s[i] == '*' && (i += 1))
+		m = va_arg(ap, int);
+	m = (s[i] >= '0' && s[i] <= '9') ? 0 : m;
+	while (s[i] >= '0' && s[i] <= '9')
+		m += m * 9 + s[i++] - '0';
+	while (s[i] == '*' && (i += 1))
+		m = va_arg(ap, int);
+	f[1] = m < 0 ? -m : m;
+	if (m < 0 && (*f |= 1 << 2))
+		*f |= 1 << 2;
+	p = -1;
+	while (s[i] == '.')
+		if (s[i] == '.' && s[i + 1] == '*' && (i += 2))
+			p = va_arg(ap, int);
+		else if (s[i] == '.' && (i += 1) && !(p = 0))
+			while (s[i] >= '0' && s[i] <= '9')
+				p += p * 9 + s[i++] - '0';
+	f[2] = p < -1 ? -1 : p;
+	return (i);
 }
 
-static void	ft_is_modulo(t_temp *temp)
+static int			ft_flags(char *s, long long *f, int p)
 {
-	temp->flag = 1;
-	temp->start = temp->i;
+	while ((s[p] == '#' && (*f |= 1)) || (s[p] == '0' &&
+	(*f |= 1 << 1)) || (s[p] == '-' && (*f |= 1 << 2)) || (s[p] == '+' &&
+	(*f |= 1 << 3)) || (s[p] == ' ' && (*f |= 1 << 4)))
+		++p;
+	return (p);
 }
 
-static char	ft_while(const char *str, t_temp *tp, va_list args, t_pdata *print)
+static int			ft_mod(char *s, long long *f, int p, int i)
 {
-	va_list	args_cpy;
+	while ((s[p + i] == 'h' && (s[p + i + 1] == 'h') && (*f |= 1 << 5) &&
+	(p += 1)) || ((s[p + i] == 'h') && (*f |= 1 << 6)) || ((s[p + i] == 'l' &&
+	s[p + i + 1] == 'l') && (*f |= 1 << 7) && (p += 1)) ||
+	((s[p + i] == 'l') && (*f |= 1 << 8)) || ((s[p + i] == 'j') &&
+	(*f |= 1 << 9)) || ((s[p + i] == 'z') && (*f |= 1 << 10)))
+		p += 1;
+	return (p);
+}
 
-	if (tp->flag > 0)
-	{
-		tp->count += (tp->flag = is_flag(str[tp->i]));
-		if (tp->count >= 0 && ((tp->flag == 1 || tp->flag == 0) || str[tp->i + 1] == '\0'))
+static int			ft_parse(char *s, int i, va_list ap, int *c)
+{
+	long long	f[3];
+	int			p;
+	int			r;
+
+	f[0] = 0;
+	p = 0;
+	r = 0;
+	if (!s[i])
+		return (i);
+	p = ft_flags(&s[i], f, p);
+	p += ft_fields(&s[p + i], f, ap);
+	p = ft_flags(&s[i], f, p);
+	p = ft_mod(s, f, p, i);
+	p = ft_flags(&s[i], f, p);
+	if (!s[p + i])
+		return (p + i);
+	if (s[p + i] && !(r = ft_format(&s[p + i], f, ap, c)))
+		return (0);
+	else if (!s[p + i] || r != -1)
+		return (p + i + 1);
+	return (i);
+}
+
+int					ft_printf(const char *s, ...)
+{
+	va_list			ap;
+	int				c[1];
+	int				i;
+
+	i = 0;
+	*c = 0;
+	va_start(ap, s);
+	while (s[i])
+		if (s[i] == '%')
 		{
-			va_copy(args_cpy, args);
-			flag_man(&print, tp, str, args_cpy);
-			va_end(args_cpy);
-			tp->i += (str[tp->i] == '%' && str[tp->i + 1] != '\0') ? 1 : 0;
+			if (!(i = ft_parse((char*)s, i + 1, ap, c)))
+				return (-1);
 		}
-	}
-	if (str[tp->i] == '%')
-		ft_is_modulo(tp);
-	return (str[tp->i]);
-}
-
-int			ft_printf(const char *str, ...)
-{
-	va_list	args;
-	t_pdata	*print;
-	t_temp	temp;
-
-	print = (t_pdata *)malloc(sizeof(t_pdata) * 1);
-	va_start(args, str);
-	data_init(print, &temp);
-	while (str[++temp.i])
-		ft_while(str, &temp, args, print);
-	print->tend = temp.i;
-	if (str[temp.i] != '0' && str[(temp.i) - 1] != '%')
-		data_man(print, str, print->tstart, print->tend);
-	va_end(args);
-	free(print);
-	return (print->len);
+		else if (s[i] == '{')
+			i = ft_color((char*)s, i, c);
+		else if (((*c) += 1))
+			write(1, &s[i++], 1);
+	va_end(ap);
+	return (*c);
 }

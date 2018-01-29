@@ -6,7 +6,7 @@
 /*   By: dbauduin <dbauduin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/22 16:56:29 by dbauduin          #+#    #+#             */
-/*   Updated: 2017/11/22 16:57:00 by dbauduin         ###   ########.fr       */
+/*   Updated: 2018/01/17 10:01:23 by Damien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void		print_total(t_data *data, char *path, char **tab, int count)
 		total += data->file.st_blocks;
 		free(s);
 	}
-	printf("total %d\n", total);
+	ft_printf("total %d\n", total);
 }
 
 void  ft_print(t_data *data, char *path, char **tab, int count)
@@ -43,21 +43,23 @@ void  ft_print(t_data *data, char *path, char **tab, int count)
 	while (i < count && i >= 0)
 	{
 		if (data->opt_l && (data->opt_a || tab[i][0] != '.'))
-			ft_print_opt_l(data, path, tab[i], (i == count - 1) ? 0 : 1);
+			ft_print_opt_l(data, path, tab[i]);
 		else if (data->opt_a || tab[i][0] != '.')
 		{
 		  if ((size += (data->size + 1)) >= (data->width - data->size))
 			{
-				printf("\n");
+				ft_printf("\n");
 				size = 0;
 			}
-		  printf("%-*s", (data->size + 1), tab[i]);
+		  ft_printf("%s%-*s%s", ft_color_file(path, tab[i]),(data->size + 1), tab[i], DEFAULT);
 		}
 		data->opt_r ? i-- : i++;
 	}
+	if ((count > 2 || data->opt_a) && !data->opt_l)
+		ft_printf("\n");
 }
 
-void	ft_print_opt_l(t_data *data, char *path, char *file, int n)
+void	ft_print_opt_l(t_data *data, char *path, char *file)
 {
 	char	*tmp;
 
@@ -66,37 +68,37 @@ void	ft_print_opt_l(t_data *data, char *path, char *file, int n)
 	lstat(tmp, &data->file);
 	ft_print_rights(data);
 	ft_print_time(data);
-	printf("%s", file);
+	ft_printf("%s%s%s", ft_color_file(path, file), file, DEFAULT);
 	print_link(tmp);
-	printf("%s", n ? "\n" : "");
+	ft_printf("\n");
 	free (tmp);
 }
 
 void	ft_print_rights(t_data *data)
 {
 	if (S_ISREG((*data).file.st_mode))
-		printf("-");
+		ft_printf("-");
 	else if (S_ISDIR((*data).file.st_mode))
-		printf("d");
+		ft_printf("d");
 	else if (S_ISCHR((*data).file.st_mode))
-		printf("c");
+		ft_printf("c");
 	else if (S_ISBLK((*data).file.st_mode))
-		printf("b");
+		ft_printf("b");
 	else if (S_ISFIFO((*data).file.st_mode))
-		printf("p");
+		ft_printf("p");
 	else if (S_ISLNK((*data).file.st_mode))
-		printf("l");
+		ft_printf("l");
 	else if (S_ISSOCK((*data).file.st_mode))
-		printf("s");
-	printf("%s", (*data).file.st_mode & S_IRUSR ? "r" : "-");
-	printf("%s", (*data).file.st_mode & S_IWUSR ? "w" : "-");
-	printf("%s", (*data).file.st_mode & S_IXUSR ? "x" : "-");
-	printf("%s", (*data).file.st_mode & S_IRGRP ? "r" : "-");
-	printf("%s", (*data).file.st_mode & S_IWGRP ? "w" : "-");
-	printf("%s", (*data).file.st_mode & S_IXGRP ? "x" : "-");
-	printf("%s", (*data).file.st_mode & S_IROTH ? "r" : "-");
-	printf("%s", (*data).file.st_mode & S_IWOTH ? "w" : "-");
-	printf("%s", (*data).file.st_mode & S_IXOTH ? "x" : "-");
+		ft_printf("s");
+	ft_printf("%s", (*data).file.st_mode & S_IRUSR ? "r" : "-");
+	ft_printf("%s", (*data).file.st_mode & S_IWUSR ? "w" : "-");
+	ft_printf("%s", (*data).file.st_mode & S_IXUSR ? "x" : "-");
+	ft_printf("%s", (*data).file.st_mode & S_IRGRP ? "r" : "-");
+	ft_printf("%s", (*data).file.st_mode & S_IWGRP ? "w" : "-");
+	ft_printf("%s", (*data).file.st_mode & S_IXGRP ? "x" : "-");
+	ft_printf("%s", (*data).file.st_mode & S_IROTH ? "r" : "-");
+	ft_printf("%s", (*data).file.st_mode & S_IWOTH ? "w" : "-");
+	ft_printf("%s", (*data).file.st_mode & S_IXOTH ? "x" : "-");
 }
 
 void	ft_print_time(t_data *data)
@@ -108,8 +110,8 @@ void	ft_print_time(t_data *data)
 	tmp = ctime(&data->file.st_mtime);
 	pwd = getpwuid(data->file.st_uid);
 	grp = getgrgid(data->file.st_gid);
-	printf(" %4hu", data->file.st_nlink);
-	printf(" %5s	%5s", pwd->pw_name, grp->gr_name);
-	printf(" %8lld", data->file.st_size);
-	printf(" %-14.12s", &tmp[4]);
+	ft_printf(" %4hu", data->file.st_nlink);
+	ft_printf(" %5s	%5s", pwd->pw_name, grp->gr_name);
+	ft_printf(" %8lld", data->file.st_size);
+	ft_printf(" %-14.12s", &tmp[4]);
 }

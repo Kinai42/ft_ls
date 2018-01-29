@@ -14,7 +14,7 @@
 #include "ft_ls.h"
 #include <sys/ioctl.h>
 
-static void	data_init(t_data *data)
+void	data_init(t_data *data)
 {
 	struct winsize sz;
 
@@ -48,18 +48,18 @@ int			main(int ac, char **av)
 	arg = 1;
 	while (av[++index] && data->arg)
 		{
-			if (av[index][0] != '-')
+			if (av[index][0] != '-' && stat(av[index], &data->file) != -1)
 				{
-					stat(av[index], &data->file);
 					if (data->arg > 1 && S_ISDIR(data->file.st_mode))
-						printf("%s :\n", av[index]);
+						ft_printf("%s :\n", av[index]);
 					ft_ls(data, av[index], S_ISDIR(data->file.st_mode) ? 1 : 0);
-					if (arg++ < data->arg)
-						printf("\n");
+					if (arg < data->arg)
+						ft_printf("\n");
 				}
+				if (av[index][0] != '-')
+					arg++;
 		}
 	if (!data->arg)
 		ft_ls(data, ".", 1);
-	printf("\n");
 	return (0);
 }

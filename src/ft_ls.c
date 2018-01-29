@@ -6,7 +6,7 @@
 /*   By: dbauduin <dbauduin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/22 16:54:55 by dbauduin          #+#    #+#             */
-/*   Updated: 2017/11/22 16:55:37 by dbauduin         ###   ########.fr       */
+/*   Updated: 2018/01/17 09:46:28 by Damien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void  ft_ls(t_data *data, char *path, int dof)
 
 	data->size = 0;
 	if (dof == 0)
-		printf("%s\n", path);
+		ft_printf("%s\n", path);
 	else
 	{
 		i = 0;
@@ -71,7 +71,7 @@ void  ft_ls(t_data *data, char *path, int dof)
 		if (data->opt_rec)
 			data->opt_r ? ft_rev(data, path, tab, count) : ft_normal(data, path, tab, count);
 		closedir(dir);
-		free (tab);
+		ft_cleaner(tab, count);
 	}
 }
 
@@ -90,8 +90,8 @@ void ft_normal(t_data *data, char *path, char **tab, int count)
 		if (S_ISDIR(data->file.st_mode) && !(S_ISLNK(data->file.st_mode)))
 			if ((((tab[i][0] != '.' || data->opt_a) && tab[i][1]) || tab[i][0] != '.') && tab[i][1] != '.')
 			{
-				printf("%s", !data->opt_l ? "\n" : "");
-				printf("\n%s:%s", tmp, count > 2 ? "\n" : "");
+				ft_printf("\n");
+				ft_printf("%s:\n", tmp);
 				ft_ls(data, tmp, 1);
 			}
 		free(tmp);
@@ -109,10 +109,10 @@ void ft_rev(t_data *data, char *path, char **tab, int count)
 		tmp = ft_strjoin(tmp, tab[count]);
 		lstat(tmp, &data->file);
 		if (S_ISDIR(data->file.st_mode) && !(S_ISLNK(data->file.st_mode)))
-			if ((((tab[i][0] != '.' || data->opt_a) && tab[i][1]) || tab[i][0] != '.') && tab[i][1] != '.')
+			if ((((tab[count][0] != '.' || data->opt_a) && tab[count][1]) || tab[count][0] != '.') && tab[count][1] != '.')
 			{
-				printf("%s", !data->opt_l ? "\n" : "");
-				printf("\n%s:%s", tmp, count > 2 ? "\n" : "");
+				ft_printf("\n");
+				ft_printf("%s:\n", tmp);
 				ft_ls(data, tmp, 1);
 			}
 		free(tmp);

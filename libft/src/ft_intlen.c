@@ -14,15 +14,14 @@
 
 int		ft_intlen(long long n)
 {
-	int i;
+	int l;
 
-	i = 0;
-	(n <= 0) ? i++ : i;
-	n = (n < 0) ? (n * -1) : n;
+	l = n == 0 ? 1 : 0;
+	n *= (n < 0) ? (-1) : 1;
 	while (n > 0)
 	{
 		n /= 10;
-		i++;
+		l++;
 	}
-	return (i);
+	return (l);
 }

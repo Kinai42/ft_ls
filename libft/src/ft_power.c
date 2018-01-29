@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
+
 unsigned long long int	ft_iterative_power(int nb, int power)
 {
 	int tmp;

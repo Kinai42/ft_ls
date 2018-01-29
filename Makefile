@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: Damien <dbauduin@student.42.fr>            +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2018/01/28 15:45:04 by Damien            #+#    #+#              #
+#    Updated: 2018/01/28 15:45:06 by Damien           ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 include .misc/make/color
 include .misc/make/paths
 include .misc/make/misc_var
@@ -13,8 +25,10 @@ CC_FLAG ?=		-Werror \
 				-Wall	\
 				-Wextra \
 
-CC_FLAG++	?=	-O1 -g -fsanitize=address	\
-				-fno-omit-frame-pointer		\
+CC_FLAG++	?=		-Werror \
+				-Wall	\
+				-Wextra \
+				-g -fsanitize=leak \
 
 INCLUDE = include
 
@@ -35,18 +49,16 @@ all: $(NAME)
 $(NAME): $(SRC)
 	@make -C ./libft
 	@make library --no-print-directory
-	@$(CC) $(CC_FLAG)  libft/libft.a -o $(NAME) $(OBJ_P)
+	@$(CC) $(CC_FLAG) libft/libft.a -o $(NAME) $(OBJ_P)
 
 clean:
 	make	-C ./libft clean
 	rm		-f	$(OBJ_W)
 	printf	"$(WARN)[!][$(PROJECT)] Removed all objects from ./$(P_OBJ)$(C_DEF)\n"
-	printf	"$(OK)[+][$(PROJECT)] Cleaned$(C_DEF)\n"
 
 fclean: clean
 	make	-C ./libft fclean
 	rm		-f	$(NAME)
-	printf	"$(WARN)[!][$(PROJECT)] Removed all binary ./$(P_BIN)$(C_DEF)\n"
 	printf	"$(OK)[+][$(PROJECT)] Fully cleaned$(C_DEF)\n"
 
 re: fclean all

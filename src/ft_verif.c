@@ -16,11 +16,11 @@ void  ft_error(char index, char *path)
 {
 	if (index == 1)
 	{
-		printf("ls: illegal option -- %c\nusage: ls [-Ralrt] [file ...]\n", *path);
+		ft_printf("ls: illegal option -- %c\nusage: ls [-Ralrt] [file ...]\n", *path);
 		exit (0);
 	}
-  if (index == 2)
-		printf("ls: %s: No such file or directory\n", path);
+  if (index == 2 && path)
+		ft_printf("ls: %s: No such file or directory\n", path);
 }
 
 int		format_verif_ls(t_data *data, char **av, int ac)
@@ -41,11 +41,32 @@ int		format_verif_ls(t_data *data, char **av, int ac)
   }
   while (index < (ac) && av[index])
 	{
-    stat(av[index], &data->file);
-		if (!(S_ISDIR(data->file.st_mode)) && !(S_ISREG(data->file.st_mode)))
-      ft_error(2, av[index]);
+    if (stat(av[index], &data->file) == -1)
+			 ft_error(2, av[index]);
+		data->arg++;
     index++;
-    data->arg++;
 	}
 	return (0);
+}
+
+char	*ft_color_file(char *path, char *file)
+{
+	struct stat sb;
+	char	*tmp;
+
+	tmp = ft_strjoin(path, "/");
+	tmp = ft_strjoin(tmp, file);
+	lstat(tmp, &sb);
+	free (tmp);
+	if (S_ISLNK(sb.st_mode))
+		return(CYAN);
+	if (S_ISDIR(sb.st_mode))
+			return(BLUE);
+	if (sb.st_mode & S_IXUSR)
+		return(GREEN);
+	if (S_ISSOCK(sb.st_mode))
+			return(VIOLET);
+	if (S_ISBLK(sb.st_mode) || S_ISFIFO(sb.st_mode))
+			return(YELLOW);
+	return(DEFAULT);
 }

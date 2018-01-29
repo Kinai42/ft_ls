@@ -10,9 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
 #include "libft.h"
-#include <stdio.h>
 
 static int	ft_uns_int_len(unsigned long long int nb, char comma)
 {
@@ -25,7 +23,7 @@ static int	ft_uns_int_len(unsigned long long int nb, char comma)
 	return (len);
 }
 
-void		ft_ftoa_uns(double floa, char *str, char comma, int precis_val)
+void		ft_ftoa_uns(double floa, unsigned char *str, char comma, int precis_val)
 {
 	t_ull		i_part;
 	long double	f_part;
@@ -34,7 +32,7 @@ void		ft_ftoa_uns(double floa, char *str, char comma, int precis_val)
 	i_part = (unsigned long long int)floa;
 	f_part = floa - (long double)i_part;
 	i = ft_uns_int_len(i_part, comma) - 1;
-	ft_itoabase_uns(i_part, 10, comma, &str[i]);
+	//ft_itoabase_uns(i_part, 10, comma, &str[i]);
 	if (precis_val != 0)
 	{
 		str[++i] = '.';

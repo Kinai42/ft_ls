@@ -10,26 +10,30 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
 #include "libft.h"
-#include <stdio.h>
 
-void		ft_itoabase_uns(unsigned long long int nb, int b, char c, char *str)
+char		*ft_itoabase_uns(unsigned long long n, int b, long long *f, char c)
 {
-	int comma;
+	char				*s;
+	unsigned long long	n2;
+	int					l;
 
-	comma = 0;
-	while (nb >= (unsigned long long)b)
+	l = 1;
+	n2 = n;
+	while (n2 >= (unsigned long long)b && (n2 /= b))
+		l++;
+	l = f && f[2] > l ? f[2] : l;
+	if (!(s = ft_strnew(l--)))
+		return (0);
+	while (n >= (unsigned long long)b)
 	{
-		if (comma++ && comma % 4 == 0 && c > 0 && b == 10)
-			*(str--) = ',';
-		else
-		{
-			*(str--) = c < 'a' ? BASE_MAJ(nb % b) : BASE_MIN(nb % b);
-			nb /= b;
-		}
+		s[l--] = c == 'X' ?
+		("0123456789ABCDEF")[n % b] : ("0123456789abcdef")[n % b];
+		n /= b;
 	}
-	if (comma++ && comma % 4 == 0 && c > 0 && b == 10)
-		*(str--) = ',';
-	*(str--) = c < 'a' ? BASE_MAJ(nb % b) : BASE_MIN(nb % b);
+	s[l--] = c == 'X' ? ("0123456789ABCDEF")[n % b] :
+	("0123456789abcdef")[n % b];
+	while (l >= 0)
+		s[l--] = '0';
+	return (f[2] == 0 && *s == '0' ? "" : s);
 }

@@ -15,6 +15,10 @@
 
 # include <stdlib.h>
 # include <string.h>
+# include <stdarg.h>
+# include <wchar.h>
+# include <unistd.h>
+# include <stdio.h>
 
 # define BASE_MAJ(x) "0123456789ABCDEF"[x]
 # define BASE_MIN(x) "0123456789abcdef"[x]
@@ -30,8 +34,7 @@ typedef struct	s_list
 
 int				ft_atoi(char *str);
 void			ft_bzero(void *s, size_t n);
-void 			ft_cleaner(char **tab, int count);
-int				ft_errret(char *name, char *msg, int ret);
+void ft_cleaner(char **tab, int count);
 int				ft_isalnum(int c);
 int				ft_isalpha(int c);
 int				ft_isascii(int c);
@@ -53,7 +56,6 @@ size_t			ft_strlcat(char *dest, char const *src, size_t size);
 size_t			ft_strlen(const char *s);
 char			*ft_strncat(char *s1, const char *s2, size_t n);
 int				ft_strncmp(const char *s1, const char *s2, size_t n);
-char			*ft_strcpy(char *dest, char *src);
 char			*ft_strncpy(char *dest, char *src, size_t n);
 char			*ft_strnstr(char *str, char *to_find, size_t len);
 char			*ft_strrchr(const char *s, int c);
@@ -101,8 +103,18 @@ int				ft_chrindex(char *str, char c);
 int				ft_chrindexi(char *str, char c, int len);
 char			*ft_strjoini(char const *s1, char const *s2, size_t len);
 char			*ft_strchri(const char *s, int c, unsigned int len);
-void			ft_itoabase_uns(t_ull nb, int b, char c, char *str);
-void			ft_ftoa_uns(double floa, char *str, char comma, int precis_val);
+char		*ft_itoabase_uns(unsigned long long n, int b, long long *f, char c);
+char		*ft_ftoa(double floa, long long *f);
 void			simple_sort(int *array, int len);
+char			*ft_strndup(const char *s1, size_t n);
+int			ft_countwords(char const *s, char c);
+void			ft_puttab(char **tab);
+int				ft_isspace(char c);
+void			ft_lstpush(t_list **alst, t_list *new);
+int				ft_freeret(void *p, int r);
+int		ft_charwlen(wchar_t c);
+int		ft_strwlen(wchar_t *s);
+void	ft_putwchar(wchar_t c);
+void	ft_putwstr(wchar_t *s);
 
 #endif
