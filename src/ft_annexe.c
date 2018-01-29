@@ -28,7 +28,7 @@ int	ft_count(char *path)
 
 char  ft_is_flag(char c)
 {
-	if (c == 'a' || c == 'l' || c == 'r' || c == 't' || c == 'R')
+	if (c == 'a' || c == 'l' || c == 'r' || c == 't' || c == 'R' || c == 'G')
 		return (1);
 	return (0);
 }
@@ -47,6 +47,8 @@ int ft_option(t_data *data, char c)
     data->opt_t = 1;
   else if (c == 'R')
     data->opt_rec = 1;
+	else if (c == 'G')
+		data->opt_G = 1;
   return (1);
 }
 

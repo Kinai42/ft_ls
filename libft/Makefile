@@ -25,11 +25,6 @@ CC		?=	clang
 CC_FLAG ?=	-Werror \
 			-Wall	\
 			-Wextra \
-			#-O1 -g -fsanitize=address	\
-			#-fno-omit-frame-pointer		\
-
-
-INCLUDE = include
 
 NAME	?=	libft.a
 
@@ -39,11 +34,10 @@ OBJ		:=	$(notdir $(SRC:.c=.o))
 
 OBJ_P	=	$(addprefix $(P_OBJ)/,$(OBJ))
 
-
 __START: os all
 	 printf "$(OK)[+][$(PROJECT)] Done$(C_DEF)\n"
 
-all: $(NAME)
+all:	$(NAME)
 
 $(NAME):  $(SRC)
 	@make library --no-print-directory
@@ -58,7 +52,7 @@ re:			fclean all
 
 object:	$(SRC) $(P_SRC) $(P_OBJ)
 	$(foreach SOURCE, $(SRC), \
-		$(CC) $(CC_FLAG) -I ./include -c $(SOURCE) -o $(P_OBJ)/$(notdir $(SOURCE:.c=.o))	&& \
+		$(CC) $(CC_FLAG) -I $(P_INCLUDE) -c $(SOURCE) -o $(P_OBJ)/$(notdir $(SOURCE:.c=.o))	&& \
 		printf "$(OK)[+][$(PROJECT)] $(SOURCE)$(C_DEF)" && sleep $(SLEEP)	&& \
 		printf "\r\033[K" \
 	;)

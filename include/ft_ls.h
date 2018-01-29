@@ -31,6 +31,7 @@ typedef struct s_data
 {
 	int				opt;
 	char			opt_a;
+	char			opt_G;
 	char			opt_l;
 	char			opt_r;
 	char			opt_t;

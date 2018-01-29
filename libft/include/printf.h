@@ -15,7 +15,7 @@
 
 # include "libft.h"
 
-int					ft_printf(const char *s, ...);
+int			ft_printf(const char *s, ...);
 int			ft_format(char *s, long long *f, va_list ap, int *c);
 char		*ft_cast_int(char s, va_list ap, long long *f);
 char		*ft_cast_uns(char s, va_list ap, long long *f);

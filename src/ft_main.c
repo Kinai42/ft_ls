@@ -19,6 +19,7 @@ void	data_init(t_data *data)
 	struct winsize sz;
 
 	data->opt_a = 0;
+	data->opt_G = 0;
 	data->opt_l = 0;
 	data->opt_r = 0;
 	data->opt_t = 0;

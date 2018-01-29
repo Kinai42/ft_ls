@@ -51,7 +51,7 @@ void  ft_print(t_data *data, char *path, char **tab, int count)
 				ft_printf("\n");
 				size = 0;
 			}
-		  ft_printf("%s%-*s%s", ft_color_file(path, tab[i]),(data->size + 1), tab[i], DEFAULT);
+		  ft_printf("%s%-*s%s", data->opt_G == 1 ? ft_color_file(path, tab[i]) : DEFAULT, (data->size + 1), tab[i], DEFAULT);
 		}
 		data->opt_r ? i-- : i++;
 	}
@@ -68,7 +68,7 @@ void	ft_print_opt_l(t_data *data, char *path, char *file)
 	lstat(tmp, &data->file);
 	ft_print_rights(data);
 	ft_print_time(data);
-	ft_printf("%s%s%s", ft_color_file(path, file), file, DEFAULT);
+	ft_printf("%s%s%s", data->opt_G == 1 ? ft_color_file(path, file) : DEFAULT, file, DEFAULT);
 	print_link(tmp);
 	ft_printf("\n");
 	free (tmp);

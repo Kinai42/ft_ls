@@ -1,34 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   simple_sort.c                                      :+:      :+:    :+:   */
+/*   ft_errret.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbauduin <dbauduin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: Damien <dbauduin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/10/12 18:30:02 by dbauduin          #+#    #+#             */
-/*   Updated: 2017/10/21 16:30:01 by dbauduin         ###   ########.fr       */
+/*   Created: 2018/01/29 13:19:47 by Damien            #+#    #+#             */
+/*   Updated: 2018/01/29 13:20:01 by Damien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <unistd.h>
 
-void	ft_simple_sort(int *array, int len)
+int		ft_errret(char *name, char *msg, int ret)
 {
-	int i;
-	int temp;
-
-	i = 0;
-	while (i != (len - 1))
-	{
-		if (array[i] > array[i + 1])
-		{
-			temp = array[i];
-			array[i] = array[i + 1];
-			array[i + 1] = temp;
-			if ((i - 1) >= 0)
-				i--;
-			continue;
-		}
-		i++;
-	}
+	write(2, name, ft_strlen(name));
+	write(2, ": ", 2);
+	write(2, msg, ft_strlen(msg));
+	write(2, "\n", 1);
+	return (ret);
 }
