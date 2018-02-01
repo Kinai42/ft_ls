@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_ls.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dbauduin <dbauduin@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/01/29 17:32:37 by dbauduin          #+#    #+#             */
+/*   Updated: 2018/02/01 14:45:57 by dbauduin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef FT_LS_H
 # define FT_LS_H
 
@@ -14,6 +26,7 @@
 # include <time.h>
 # include <pwd.h>
 # include <grp.h>
+# include <sys/types.h>
 
 # define DEFAULT "\e[38;5;252m"
 # define GREEN "\e[38;5;82m"
@@ -27,11 +40,11 @@
 # define VIOLET "\e[38;5;5m"
 # define LEMON "\e[38;5;190m"
 
-typedef struct s_data
+typedef struct		s_data
 {
 	int				opt;
 	char			opt_a;
-	char			opt_G;
+	char			opt_g;
 	char			opt_l;
 	char			opt_r;
 	char			opt_t;
@@ -41,25 +54,24 @@ typedef struct s_data
 	struct stat		file;
 	char			time[12];
 	int				width;
-}				t_data;
+}					t_data;
 
-
-int	  main(int ac, char **av);
-int 	ft_option(t_data *data, char c);
-void  ft_ls(t_data *data, char *path, int ac);
-void  sort_parm_opt(t_data *data, char **tab, char *path);
-char	*ft_tab(char *path, char *tab);
-int	ft_count(char *path);
-void  ft_print(t_data *data, char *path, char **tab, int count);
-void  ft_print_rights(t_data *data);
-void  ft_print_opt_l(t_data *data, char *path, char *file);
-void  ft_print_time(t_data *data);
-void  ft_error(char index, char *path);
-int		ft_size(t_data *data, char *name);
-void 	ft_normal(t_data *data, char *path, char **tab, int ac);
-void 	ft_rev(t_data *data, char *path, char **tab, int ac);
-void	print_link(char *path);
-int		format_verif_ls(t_data *data, char **av, int ac);
-char	*ft_color_file(char *path, char *file);
+int					main(int ac, char **av);
+int					ft_option(t_data *data, char c);
+void				ft_ls(t_data *data, char *path, int ac);
+void				sort_parm_opt(t_data *data, char **tab, char *path);
+char				*ft_tab(char *path, char *tab);
+int					ft_count(char *path);
+void				ft_print(t_data *data, char *path, char **tab, int count);
+void				ft_print_rights(t_data *data);
+void				ft_print_opt_l(t_data *data, char *path, char *file);
+void				ft_print_time(t_data *data);
+void				ft_error(char index, char *path);
+int					ft_size(t_data *data, char *name);
+void				ft_normal(t_data *data, char *path, char **tab, int ac);
+void				ft_rev(t_data *data, char *path, char **tab, int ac);
+void				print_link(char *path);
+int					format_verif_ls(t_data *data, char **av, int ac);
+char				*ft_c_file(char *path, char *file);
 
 #endif

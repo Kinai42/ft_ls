@@ -6,17 +6,17 @@
 /*   By: dbauduin <dbauduin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/22 16:56:29 by dbauduin          #+#    #+#             */
-/*   Updated: 2018/01/17 10:01:23 by Damien           ###   ########.fr       */
+/*   Updated: 2018/02/01 14:52:30 by dbauduin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-void		print_total(t_data *data, char *path, char **tab, int count)
+void	print_total(t_data *data, char *path, char **tab, int count)
 {
-	static int		total;
-	int		i;
-	char	*s;
+	static int	total;
+	int			i;
+	char		*s;
 
 	total = 0;
 	i = -1;
@@ -32,7 +32,7 @@ void		print_total(t_data *data, char *path, char **tab, int count)
 	ft_printf("total %d\n", total);
 }
 
-void  ft_print(t_data *data, char *path, char **tab, int count)
+void	ft_print(t_data *data, char *path, char **tab, int count)
 {
 	int	i;
 	int	size;
@@ -46,12 +46,13 @@ void  ft_print(t_data *data, char *path, char **tab, int count)
 			ft_print_opt_l(data, path, tab[i]);
 		else if (data->opt_a || tab[i][0] != '.')
 		{
-		  if ((size += (data->size + 1)) >= (data->width - data->size))
+			if ((size += (data->size + 1)) >= (data->width - data->size))
 			{
 				ft_printf("\n");
 				size = 0;
 			}
-		  ft_printf("%s%-*s%s", data->opt_G == 1 ? ft_color_file(path, tab[i]) : DEFAULT, (data->size + 1), tab[i], DEFAULT);
+			ft_printf("%s%-*s%s", data->opt_g == 1 ? ft_c_file(path, tab[i]) :
+					DEFAULT, (data->size + 1), tab[i], DEFAULT);
 		}
 		data->opt_r ? i-- : i++;
 	}
@@ -68,10 +69,11 @@ void	ft_print_opt_l(t_data *data, char *path, char *file)
 	lstat(tmp, &data->file);
 	ft_print_rights(data);
 	ft_print_time(data);
-	ft_printf("%s%s%s", data->opt_G == 1 ? ft_color_file(path, file) : DEFAULT, file, DEFAULT);
+	ft_printf("%s%s%s", data->opt_g == 1 ? ft_c_file(path, file) :
+			DEFAULT, file, DEFAULT);
 	print_link(tmp);
 	ft_printf("\n");
-	free (tmp);
+	free(tmp);
 }
 
 void	ft_print_rights(t_data *data)
@@ -106,12 +108,24 @@ void	ft_print_time(t_data *data)
 	char			*tmp;
 	struct passwd	*pwd;
 	struct group	*grp;
+	int				major;
+	int				minor;
 
 	tmp = ctime(&data->file.st_mtime);
 	pwd = getpwuid(data->file.st_uid);
 	grp = getgrgid(data->file.st_gid);
+	stat(tmp, &data->file);
 	ft_printf(" %4hu", data->file.st_nlink);
 	ft_printf(" %5s	%5s", pwd->pw_name, grp->gr_name);
-	ft_printf(" %8lld", data->file.st_size);
+	if (S_ISCHR(data->file.st_mode) || S_ISBLK(data->file.st_mode))
+	{
+		major = data->file.st_rdev;
+		while ((major / 256) > 0)
+			major /= 256;
+		minor = data->file.st_rdev % 256;
+		ft_printf("%4d,%4d", major, minor);
+	}
+	else
+		ft_printf(" %8lld", data->file.st_size);
 	ft_printf(" %-14.12s", &tmp[4]);
 }

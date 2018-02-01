@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-void	ft_simple_sort(int *array, int len)
+void	simple_sort(int *array, int len)
 {
 	int i;
 	int temp;

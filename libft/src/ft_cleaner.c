@@ -6,15 +6,15 @@
 /*   By: dbauduin <dbauduin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/21 16:25:38 by dbauduin          #+#    #+#             */
-/*   Updated: 2017/10/21 16:25:42 by dbauduin         ###   ########.fr       */
+/*   Updated: 2018/01/29 17:57:33 by dbauduin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void ft_cleaner(char **tab, int count)
+void	ft_cleaner(char **tab, int count)
 {
-  while (--count >= 0)
-    free(tab[count]);
-  free(tab);
+	while (--count >= 0)
+		free(tab[count]);
+	free(tab);
 }

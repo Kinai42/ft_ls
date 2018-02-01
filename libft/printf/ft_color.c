@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_color.c				                                  :+:      :+:    :+:   */
+/*   ft_color.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbauduin <dbauduin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbauduin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/10/12 17:57:50 by dbauduin          #+#    #+#             */
-/*   Updated: 2017/10/22 22:30:03 by dbauduin         ###   ########.fr       */
+/*   Created: 2018/01/29 15:03:51 by dbauduin          #+#    #+#             */
+/*   Updated: 2018/01/29 15:04:02 by dbauduin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <printf.h>
 
-int			ft_color(char *s, int i, int *c)
+int	ft_color(char *s, int i, int *c)
 {
 	if (!ft_strncmp(&s[i], "{red}", 5) && (i += 5))
 		write(1, "\x1b[31m", 6);

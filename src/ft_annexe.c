@@ -6,17 +6,17 @@
 /*   By: dbauduin <dbauduin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/22 16:48:27 by dbauduin          #+#    #+#             */
-/*   Updated: 2017/11/22 16:54:48 by dbauduin         ###   ########.fr       */
+/*   Updated: 2018/01/29 17:40:36 by dbauduin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-int	ft_count(char *path)
+int		ft_count(char *path)
 {
-	int count;
 	struct dirent	*dirent;
 	DIR				*dir;
+	int				count;
 
 	count = 0;
 	dir = opendir(path);
@@ -26,30 +26,30 @@ int	ft_count(char *path)
 	return (count);
 }
 
-char  ft_is_flag(char c)
+char	ft_is_flag(char c)
 {
 	if (c == 'a' || c == 'l' || c == 'r' || c == 't' || c == 'R' || c == 'G')
 		return (1);
 	return (0);
 }
 
-int ft_option(t_data *data, char c)
+int		ft_option(t_data *data, char c)
 {
-  if (!ft_is_flag(c))
-    return (0);
-  if (c == 'a')
-    data->opt_a = 1;
-  else if (c == 'l')
-    data->opt_l = 1;
-  else if (c == 'r')
-    data->opt_r = 1;
-  else if (c == 't')
-    data->opt_t = 1;
-  else if (c == 'R')
-    data->opt_rec = 1;
+	if (!ft_is_flag(c))
+		return (0);
+	if (c == 'a')
+		data->opt_a = 1;
+	else if (c == 'l')
+		data->opt_l = 1;
+	else if (c == 'r')
+		data->opt_r = 1;
+	else if (c == 't')
+		data->opt_t = 1;
+	else if (c == 'R')
+		data->opt_rec = 1;
 	else if (c == 'G')
-		data->opt_G = 1;
-  return (1);
+		data->opt_g = 1;
+	return (1);
 }
 
 char	*ft_tab(char *path, char *tab)
@@ -61,11 +61,11 @@ char	*ft_tab(char *path, char *tab)
 	tmp = ft_strjoin(path, "/");
 	tmp = ft_strjoin(tmp, tab);
 	s = tmp;
-	free (tmp);
+	free(tmp);
 	return (s);
 }
 
-void		print_link(char *path)
+void	print_link(char *path)
 {
 	char	buff[1000];
 	int		rd;
